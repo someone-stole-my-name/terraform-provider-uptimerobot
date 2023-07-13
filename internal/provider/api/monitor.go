@@ -186,8 +186,16 @@ func (client UptimeRobotApiClient) GetMonitor(id int) (m Monitor, err error) {
 			contact := v.(map[string]interface{})
 			var ac MonitorAlertContact
 			ac.ID = contact["id"].(string)
-			ac.Recurrence = int(contact["recurrence"].(float64))
-			ac.Threshold = int(contact["threshold"].(float64))
+			if contact["recurrence"] != nil {
+				ac.Recurrence = int(contact["recurrence"].(float64))
+			} else {
+				ac.Recurrence = 0
+			}
+			if contact["threshold"] != nil {
+				ac.Threshold = int(contact["threshold"].(float64))
+			} else {
+				ac.Threshold = 0
+			}
 			m.AlertContacts[k] = ac
 		}
 	}
