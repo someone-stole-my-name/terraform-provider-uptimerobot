@@ -7,7 +7,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/hashicorp/go-retryablehttp"
 )
@@ -18,6 +20,21 @@ func New(apiKey string) UptimeRobotApiClient {
 
 type UptimeRobotApiClient struct {
 	apiKey string
+}
+
+func WaitOnRateLimit(l retryablehttp.Logger, res *http.Response) {
+	if res == nil {
+		return
+	}
+
+	retryAfterStr := res.Header.Get("retry-after")
+	retryAfter, err := strconv.Atoi(retryAfterStr)
+	if err != nil {
+		log.Printf("[ERROR] Error parsing Retry-After header %s: %e", retryAfterStr, err)
+	}
+
+	log.Printf("[DEBUG] Got rate limit, sleep %d seconds", retryAfter)
+	time.Sleep(time.Second * time.Duration(retryAfter))
 }
 
 func (client UptimeRobotApiClient) MakeCall(
@@ -39,6 +56,7 @@ func (client UptimeRobotApiClient) MakeCall(
 
 	retryClient := retryablehttp.NewClient()
 	retryClient.RetryMax = 10
+	retryClient.ResponseLogHook = WaitOnRateLimit
 	standardClient := retryClient.StandardClient()
 
 	res, err := standardClient.Do(req)
