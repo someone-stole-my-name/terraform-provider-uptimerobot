@@ -9,17 +9,19 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/hashicorp/go-retryablehttp"
 )
 
 func New(apiKey string) UptimeRobotApiClient {
-	return UptimeRobotApiClient{apiKey}
+	return UptimeRobotApiClient{apiKey, &sync.Mutex{}}
 }
 
 type UptimeRobotApiClient struct {
 	apiKey string
+	mutex  *sync.Mutex
 }
 
 func WaitOnRateLimit(l retryablehttp.Logger, res *http.Response) {
@@ -41,6 +43,9 @@ func (client UptimeRobotApiClient) MakeCall(
 	endpoint string,
 	params string,
 ) (map[string]interface{}, error) {
+	client.mutex.Lock()
+	defer client.mutex.Unlock()
+
 	log.Printf("[DEBUG] Making request to: %#v", endpoint)
 
 	url := "https://api.uptimerobot.com/v2/" + endpoint
