@@ -24,6 +24,11 @@ func Provider() *schema.Provider {
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("UPTIMEROBOT_API_KEY", nil),
 			},
+			"cache_ttl": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  3600,
+			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"uptimerobot_account":       dataSourceAccount(),
@@ -35,7 +40,7 @@ func Provider() *schema.Provider {
 			"uptimerobot_status_page":   resourceStatusPage(),
 		},
 		ConfigureFunc: func(r *schema.ResourceData) (interface{}, error) {
-			config := uptimerobotapi.New(r.Get("api_key").(string))
+			config := uptimerobotapi.New(r.Get("api_key").(string), r.Get("cache_ttl").(int))
 			return config, nil
 		},
 	}

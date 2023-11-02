@@ -97,7 +97,7 @@ func (client UptimeRobotApiClient) GetMonitor(id int) (m Monitor, err error) {
 	data.Add("custom_http_headers", fmt.Sprintf("%d", 1))
 	data.Add("alert_contacts", fmt.Sprintf("%d", 1))
 
-	body, err := client.MakeCall(
+	body, err := client.MakeCallCachable(
 		"getMonitors",
 		data.Encode(),
 	)

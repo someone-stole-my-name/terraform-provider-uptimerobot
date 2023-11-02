@@ -10,7 +10,7 @@ type Account struct {
 }
 
 func (client UptimeRobotApiClient) GetAccountDetails() (acc Account, err error) {
-	body, err := client.MakeCall(
+	body, err := client.MakeCallCachable(
 		"getAccountDetails",
 		"",
 	)

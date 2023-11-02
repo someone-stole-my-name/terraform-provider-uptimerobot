@@ -40,7 +40,7 @@ func (client UptimeRobotApiClient) GetStatusPage(id int) (sp StatusPage, err err
 	data := url.Values{}
 	data.Add("psps", fmt.Sprintf("%d", id))
 
-	body, err := client.MakeCall(
+	body, err := client.MakeCallCachable(
 		"getPSPs",
 		data.Encode(),
 	)

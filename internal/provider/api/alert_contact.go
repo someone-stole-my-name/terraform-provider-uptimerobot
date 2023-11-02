@@ -108,7 +108,7 @@ func (client UptimeRobotApiClient) GetAlertContact(id string) (ac AlertContact, 
 	data := url.Values{}
 	data.Add("alert_contacts", id)
 
-	body, err := client.MakeCall(
+	body, err := client.MakeCallCachable(
 		"getAlertContacts",
 		data.Encode(),
 	)
