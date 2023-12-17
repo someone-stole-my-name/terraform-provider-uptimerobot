@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	uptimerobotapi "github.com/vexxhost/terraform-provider-uptimerobot/internal/provider/api"
+	uptimerobotapi "github.com/someone-stole-my-name/terraform-provider-uptimerobot/internal/provider/api"
 )
 
 func dataSourceAccount() *schema.Resource {

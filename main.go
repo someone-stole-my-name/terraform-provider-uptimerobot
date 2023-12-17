@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-	"github.com/vexxhost/terraform-provider-uptimerobot/internal/provider"
+	"github.com/someone-stole-my-name/terraform-provider-uptimerobot/internal/provider"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 	flag.Parse()
 
 	if debugMode {
-		err := plugin.Debug(context.Background(), "registry.terraform.io/vexxhost/terraform-provider-uptimerobot",
+		err := plugin.Debug(context.Background(), "registry.terraform.io/someone-stole-my-name/terraform-provider-uptimerobot",
 			&plugin.ServeOpts{
 				ProviderFunc: provider.Provider,
 			})
